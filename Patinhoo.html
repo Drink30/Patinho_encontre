@@ -1,0 +1,201 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>🦆 Encontre o Patinho</title>
+
+<link href="https://fonts.googleapis.com/css2?family=Quicksand:wght@400;600;700&family=Pacifico&display=swap" rel="stylesheet">
+
+<style>
+/* ===== ESTILO ===== */
+body {
+    margin: 0;
+    font-family: 'Quicksand', sans-serif;
+    background: #fff5f8;
+    color: #4a4a4a;
+    min-height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.screen {
+    display: none;
+    text-align: center;
+    animation: fade 0.8s ease;
+}
+
+.screen.active {
+    display: block;
+}
+
+@keyframes fade {
+    from {opacity: 0; transform: translateY(20px);}
+    to {opacity: 1; transform: translateY(0);}
+}
+
+.title {
+    font-family: 'Pacifico', cursive;
+    font-size: 3rem;
+    color: #ff6b9d;
+}
+
+.big-duck {
+    font-size: 120px;
+    margin: 20px 0;
+}
+
+.btn {
+    background: linear-gradient(135deg, #ff6b9d, #ffb5d0);
+    border: none;
+    color: white;
+    padding: 16px 40px;
+    border-radius: 50px;
+    font-size: 18px;
+    cursor: pointer;
+}
+
+.ducks-container {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 15px;
+    margin-top: 30px;
+}
+
+.duck {
+    font-size: 50px;
+    padding: 20px;
+    background: white;
+    border-radius: 20px;
+    cursor: pointer;
+    transition: 0.3s;
+}
+
+.duck:hover {
+    transform: scale(1.1);
+}
+
+.message {
+    position: fixed;
+    inset: 0;
+    background: rgba(0,0,0,0.4);
+    display: none;
+    justify-content: center;
+    align-items: center;
+}
+
+.message.show {
+    display: flex;
+}
+
+.message-box {
+    background: white;
+    padding: 30px;
+    border-radius: 20px;
+    text-align: center;
+}
+
+.final-duck {
+    font-size: 150px;
+}
+
+.love-text span {
+    display: block;
+    font-size: 1.5rem;
+    margin: 10px 0;
+}
+
+.te-amo {
+    font-family: 'Pacifico', cursive;
+    font-size: 2.5rem;
+    color: #ff6b9d;
+    margin-top: 20px;
+}
+</style>
+</head>
+
+<body>
+
+<!-- START -->
+<div class="screen active" id="start">
+    <h1 class="title">🦆 Encontre o Patinho</h1>
+    <p>Entre todos os patinhos… só um é especial 💛</p>
+    <div class="big-duck">🦆</div>
+    <button class="btn" onclick="startGame()">Começar</button>
+</div>
+
+<!-- GAME -->
+<div class="screen" id="game">
+    <p>Clique no patinho correto 🦆</p>
+    <div class="ducks-container" id="ducks"></div>
+</div>
+
+<!-- FINAL -->
+<div class="screen" id="final">
+    <div class="final-duck">🦆</div>
+
+    <div class="love-text">
+        <span>Assim como nesse jogo…</span>
+        <span>Entre todas as escolhas…</span>
+        <span>Eu escolhi você.</span>
+    </div>
+
+    <p>Obrigado por fazer parte da minha vida.</p>
+    <div class="te-amo">Eu te amo 💛</div>
+
+    <button class="btn" onclick="location.reload()">💛 Voltar às memórias</button>
+</div>
+
+<!-- ERRO -->
+<div class="message" id="msg">
+    <div class="message-box">
+        <p>Quase… tenta de novo 🦆</p>
+        <button class="btn" onclick="closeMsg()">Tentar novamente</button>
+    </div>
+</div>
+
+<script>
+/* ===== LÓGICA ===== */
+let correto = 0;
+
+function startGame() {
+    switchScreen('start', 'game');
+    gerarPatos();
+}
+
+function gerarPatos() {
+    const area = document.getElementById('ducks');
+    area.innerHTML = '';
+    const qtd = Math.floor(Math.random() * 3) + 6; // 6 a 8
+    correto = Math.floor(Math.random() * qtd);
+
+    for (let i = 0; i < qtd; i++) {
+        const pato = document.createElement('div');
+        pato.className = 'duck';
+        pato.textContent = '🦆';
+
+        pato.onclick = () => {
+            if (i === correto) {
+                switchScreen('game', 'final');
+            } else {
+                document.getElementById('msg').classList.add('show');
+            }
+        };
+
+        area.appendChild(pato);
+    }
+}
+
+function closeMsg() {
+    document.getElementById('msg').classList.remove('show');
+}
+
+function switchScreen(hide, show) {
+    document.getElementById(hide).classList.remove('active');
+    document.getElementById(show).classList.add('active');
+}
+</script>
+
+</body>
+</html>
